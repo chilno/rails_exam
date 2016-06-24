@@ -1,0 +1,33 @@
+<div class="container">
+<div class="pull-right" style="margin-top:10px">
+	<a href="/songs" style="margin-right:10px">Dashboard</a>
+	<a rel="nofollow" data-method="delete" href="/sessions/<%= current_user.id %>">Logout</a>
+</div>
+<br>
+<h3><%= @user.first_name %> <%= @user.last_name %>'s Playlist</h3>
+<br>
+<div class="col-md-12 well">
+	<table class="table">
+	  <thead class="thead-inverse">
+	    <tr>
+	      <th>Artist</th>
+	      <th>Title</th>
+	      <th>Times Added</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  <% if @songs %>
+	    <% @songs.each do |song| %>
+	    <tr>
+	      <th><%= song.song.artist%></th>
+	      <td><%= song.song.title%></td>
+	      <td><%= Playlist.where(song: song.song.id).where(user: @user.id).count%></td>
+	    </tr>
+	    <% end %>
+	  <% end %>
+	  </tbody>
+	</table>
+	<br><br>
+</div>
+</div>
+<br><br>

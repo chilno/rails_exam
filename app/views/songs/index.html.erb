@@ -1,0 +1,67 @@
+<div class="container">
+<div class="pull-right" style="margin-top:10px">
+	<a rel="nofollow" data-method="delete" href="/sessions/<%= current_user.id %>">Logout</a>
+</div>
+<h1>Welcome, <%= current_user.first_name %> <%= current_user.last_name %>!</h1>
+<br>
+<h3>All the songs in our hub:</h3>
+<br>
+<div class="col-md-12 well">
+	<table class="table">
+	  <thead class="thead-inverse">
+	    <tr>
+	      <th>Artist</th>
+	      <th>Title</th>
+	      <th>No of times Added</th>
+	      <th>Add to Playlist</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	  <% if @songs %>
+	    <% @songs.each do |song| %>
+	    <tr>
+	      <th><%= song.artist%></th>
+	      <td><a href="/songs/<%= song.id %>"><%= song.title%></a></td>
+	      <td><%= Playlist.where(song: song.id).count%></td>
+	      <td>
+		      <form action="/playlists" method="post">
+		      	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+		      	<input type="hidden" name="user_ids" value="<%= current_user.id %>">
+		      	<input type="hidden" name="song_ids" value="<%= song.id %>">
+		      	<input type="submit" class="btn btn-success" value="Add">
+		      </form>
+	      </td>
+	    </tr>
+	    <% end %>
+	  <% end %>
+	  </tbody>
+	</table>
+	<br><br>
+</div>
+
+
+
+<h2>Add a Song</h2>
+  <% if flash[:errors] %>
+    <% flash[:errors].each do |e| %>
+      <div class="alert alert-danger">
+        <p style="color: red"><%= e %></p>
+      </div>
+    <% end %>
+  <% end %>
+<form action="/songs" method="POST" class="col-md-6">
+    <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token%>">
+    <fieldset class="form-group">
+      <label>Title</label>
+      <input type="text" class="form-control" placeholder="Enter Song Title" name ="song[title]">
+    </fieldset>
+    <fieldset class="form-group">
+	    <label>Artist</label>
+	    <input type="text" class="form-control" placeholder="Enter Artist Name" name ="song[artist]">
+    </fieldset>
+	<button type="submit" class="btn btn-info pull-right">Add Song</button>
+
+</form>
+
+</div>
+<br><br>
